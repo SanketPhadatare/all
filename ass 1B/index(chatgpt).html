@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Registration</title>
+</head>
+<body>
+  <h2>User Registration</h2>
+  <form id="registrationForm">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username"><br>
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br>
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // prevent default form submission
+      
+      // Get form data
+      const formData = new FormData(this);
+      const userData = {
+        username: formData.get("username"),
+        email: formData.get("email")
+      };
+
+      // Push user data to array or local storage
+      // For this example, we'll just store it in an array
+      let registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+      registeredUsers.push(userData);
+      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+
+      // AJAX POST request
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "url_to_server_endpoint", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          // Upon successful registration, navigate to new page
+          window.location.href = "list.html";
+        }
+      };
+      xhr.send(JSON.stringify(userData));
+    });
+  </script>
+</body>
+</html>
